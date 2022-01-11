@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://jamil:socialnetwork@cluster0.hmthx.mongodb.net/social-netdb?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://jamil:socialnetwork@cluster0.hmthx.mongodb.net/social-netdb?retryWrites=true&w=majority",
+    "secretToken": "jamil975410#"
 }
