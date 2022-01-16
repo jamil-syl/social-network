@@ -61,8 +61,8 @@ router.post(
         config.get("secretToken"),
         { expiresIn: 36000 },
         (err, token) => {
-            if(err) throw err;
-            res.json({token});
+          if (err) throw err;
+          res.json({ token });
         }
       );
     } catch (err) {
