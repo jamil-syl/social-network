@@ -1,4 +1,6 @@
 {
     "mongoURI": "mongodb+srv://jamil:socialnetwork@cluster0.hmthx.mongodb.net/social-netdb?retryWrites=true&w=majority",
-    "secretToken": "jamil975410#"
+    "secretToken": "jamil975410#",
+    "githubCleantId": "e037e0410f91651cc270",
+    "githubSecret": "d7a0dce4e364ab53c024d597f445df04fea5ae6a"
 }

@@ -1,6 +1,7 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
-const res = require("express/lib/response");
+const request = require("request");
+const { check, validationResult, body } = require("express-validator");
+const config = require("config");
 const auth = require("../../middleware/auth");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
@@ -210,7 +211,7 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 		// Get remove index
 		const removeIndex = profile.experience
 			.map((item) => item.id)
-			.idexOf(req.params.exp_id);
+			.indexOf(req.params.exp_id);
 
 		if (removeIndex == 0) profile.experience.splice(removeIndex, 1);
 
@@ -239,13 +240,13 @@ router.put(
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { school, degree, fieldofstudy, from, to, current, description } =
+		const { school, degree, studyfield, from, to, current, description } =
 			req.body;
 
 		const newEdu = {
 			school,
 			degree,
-			fieldofstudy,
+			studyfield,
 			from,
 			to,
 			current,
@@ -275,7 +276,7 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
 		// Get remove index
 		const removeIndex = profile.education
 			.map((item) => item.id)
-			.idexOf(req.params.edu_id);
+			.indexOf(req.params.edu_id);
 
 		if (removeIndex == 0) profile.education.splice(removeIndex, 1);
 
@@ -284,6 +285,36 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 		res.status(500).send("Internal Server Error");
+	}
+});
+
+// @route   GET /api/profile/github/:username
+// @desc    Get user repositories from Github
+// @access  Public
+router.get("/github/:username", (req, res) => {
+	try {
+		const options = {
+			uri: `https://api.github.com/users/${
+				req.params.username
+			}/repos?per_page=5&sort=created&direction=asc&client_id=${config.get(
+				"githubCleantId"
+			)}&client_secret=${config.get("githubSecret")}`,
+			method: "GET",
+			headers: { "user-agent": "node.js" },
+		};
+
+		request(options, (error, response, body) => {
+			if (error) console.error(error);
+
+			if (response.statusCode !== 200) {
+				return res.status(404).json({ msg: "Github profile not found" });
+			}
+
+			return res.json(JSON.parse(body));
+		});
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send("internal server error");
 	}
 });
 
